@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 def thread_func(url):
-    x = requests.get(f'https://{url}', verify=False)
+    x = requests.get(f'http://{url}', verify=False)
 
 
 @app.route('/')
