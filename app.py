@@ -7,8 +7,10 @@ import threading
 app = Flask(__name__)
 
 
-def thread_func(url):
-    x = requests.get(f'http://{url}', verify=False)
+def thread_func(url, verify):
+    print("verify " + str(verify))
+    x = requests.get(url, verify=verify)
+    print(x.status_code)
 
 
 @app.route('/')
@@ -16,6 +18,7 @@ def hello():
     loops = request.args.get('loops') or 10
     th_amount = request.args.get('th_amount') or 50
     url = request.args.get('url')
+    verify = request.args.get('verify') or 'False'
     threads = []
     if url is None:
         return "Ingrese url"
@@ -24,7 +27,7 @@ def hello():
     for i in range(int(loops)):
         th_list = []
         for t in range(int(th_amount)):
-            x = threading.Thread(target=thread_func, args=(url,))
+            x = threading.Thread(target=thread_func, args=(url, verify == 'True',))
             th_list.append(x)
             x.start()
         for t in th_list:
